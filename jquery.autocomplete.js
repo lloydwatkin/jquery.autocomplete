@@ -40,10 +40,10 @@
       formatResult: formatResult,
       delimiter: null,
       zIndex: 9999,
-      searchPrefix: '',
+      prefix: '',
       searchEverywhere: false,
       appendSpace: true
-    };
+    }
     this.initialize()
     this.setOptions(options)
     return this
@@ -70,7 +70,7 @@
           self.killSuggestions()
           self.disableKillerFn()
         }
-      };
+      }
 
       if (!this.options.width) this.options.width = this.el.width()
       this.mainContainerId = 'AutocompleteContainter_' + uid
@@ -96,8 +96,8 @@
     },
     
     setOptions: function(options){
-      var o = this.options;
-      $.extend(o, options);
+      var o = this.options
+      $.extend(o, options)
       
       if (o.lookup) this.setLookup(o.lookup)
       $('#' + this.mainContainerId).css({ zIndex:o.zIndex })
@@ -219,8 +219,8 @@
       if (!d) { return $.trim(val) }
       var arr = val.split(d)
       query = $.trim(arr[arr.length - 1])
-      if (query.substring(0, this.options.searchPrefix.length) == this.options.searchPrefix)
-         return query.substring(this.options.searchPrefix.length);
+      if (query.substring(0, this.options.prefix.length) == this.options.prefix)
+         return query.substring(this.options.prefix.length)
       return ''
     },
 
@@ -257,7 +257,7 @@
         this.suggest()
       } else if (!this.isBadQuery(q)) {
         this.options.params.query = q
-        $.get(this.serviceUrl, this.options.params, function(txt) { self.processResponse(txt); }, 'text')
+        $.get(this.serviceUrl, this.options.params, function(txt) { self.processResponse(txt) }, 'text')
       }
     },
 
@@ -278,7 +278,7 @@
     suggest: function() {
       if (0 === this.suggestions.length) {
         this.hide()
-        return;
+        return
       }
 
       var div, s
