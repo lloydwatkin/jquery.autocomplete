@@ -5,14 +5,13 @@
  * Heavily modified from http://www.devbridge.com/projects/autocomplete/jquery/
  */
 (function($) {
-  var regEx = new RegExp(
+
+  function Autocomplete(el, options) {
+    this.regEx = new RegExp(
       '(\\' + ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\']
           .join('|\\') + ')',
       'g'
   )
-
-  function Autocomplete(el, options) {
-
     this.el = $(el)
     this.el.attr('autocomplete', 'off')
     this.suggestions = []
@@ -40,7 +39,7 @@
       zIndex: 9999,
       searchPrefix: '',
       searchEverywhere: false,
-      appendSpace: true
+      appendSpace: true,
     }
     this.initialize()
     this.setOptions(options)
@@ -89,8 +88,8 @@
       this.el.focus(function() { self.fixPosition() })
     },
     
-    template: function(entry, formatResult, currentValue, suggestion) {
-      return this.options.formatResult(suggestion, entry, currentValue)
+    template: function(suggestion, data) {
+      return this.options.formatResult(suggestion, data, this)
     },
     
     setOptions: function(options) {
@@ -120,6 +119,7 @@
     enable: function() {
       this.disabled = false
     },
+      
     fixPosition: function() {
       var offset = this.el.offset()
       $('#' + this.mainContainerId).css({
@@ -215,12 +215,11 @@
     },
 
     getQuery: function(val) {
-//          console.log(this.options.prefix, prefixLength, val, this.options.delimiter)
+      var prefixLength = this.options.searchPrefix.length
       var d = this.options.delimiter
       if (!d) { return $.trim(val) }
       var arr = val.split(d)
       var query = $.trim(arr[arr.length - 1])
-      var prefixLength = this.options.searchPrefix.length
       if (query.substring(0, prefixLength) == this.options.searchPrefix)
          return query.substring(this.options.searchPrefix.length)
       return ''
@@ -232,7 +231,7 @@
       q       = q.toLowerCase()
       for (var index in arr) {
         var val = arr[index]
-        if (typeof(val) == 'object')
+        if ('object' === typeof(val))
           val = val[this.options.dataKey]
         var indexPosition = val.toLowerCase().indexOf(q)
         var addData = false
@@ -242,7 +241,7 @@
           addData = true
         if (true === addData) {
           ret.suggestions.push(val)
-          ret.data.push(this.options.lookup.data[index])
+          ret.data.push(arr[index])
         }
       }
       return ret
@@ -250,10 +249,10 @@
     
     getSuggestions: function(q) {
       var self = this
-      var cr = this.isLocal ? this.getSuggestionsLocal(q) : this.cachedResponse[q]
-      if (cr && ($.isArray(cr.suggestions) || $.isObject(cr.suggestions))) {
-        this.suggestions = cr.suggestions
-        this.data = cr.data
+      var cached = this.isLocal ? this.getSuggestionsLocal(q) : this.cachedResponse[q]
+      if (cached && ($.isArray(cached.suggestions) || $.isObject(cached.suggestions))) {
+        this.suggestions = cached.suggestions
+        this.data = cached.data
         this.suggest()
       } else if (!this.isBadQuery(q)) {
         this.options.params.query = q
@@ -278,15 +277,12 @@
     },
 
     suggest: function() {
-      if (0 === this.suggestions.length) {
-        this.hide()
-        return
-      }
-
+      if (0 === this.suggestions.length)
+        return this.hide()
+        
       var div, s
       var self = this
       var len = this.suggestions.length
-      var f = this.options.fnFormatResult
       var v = this.getQuery(this.currentValue)
       var mOver = function(xi) { return function() { self.activate(xi) } }
       var mClick = function(xi) { return function() { self.select(xi) } }
@@ -294,11 +290,12 @@
       for (var i = 0; i < len; i++) {
         s = this.suggestions[i]
         var entry = this.data[i]
-        if ((typeof(entry) == 'object') && (typeof(this.options.dataKey) != 'undefined'))
+        if ((typeof(entry) === 'object') &&
+            (typeof(this.options.dataKey) !== 'undefined'))
             entry = entry[this.options.dataKey]
         div = $((self.selectedIndex === i ?
             '<div class="selected"' : '<div') + ' title="' + s + '">' +
-            this.template(entry, f, v, s) + '</div>'
+            this.template(v, this.data[i]) + '</div>'
         )
         div.mouseover(mOver(i))
         div.click(mClick(i))
@@ -315,10 +312,11 @@
       } catch (err) {
         return
       }
-      if (!$.isArray(response.data)) { response.data = [] }
+      if (!$.isArray(response.data)) response.data = []
       if (!this.options.noCache) {
         this.cachedResponse[response.query] = response
-        if (0 === response.suggestions.length) { this.badQueries.push(response.query) }
+        if (0 === response.suggestions.length)
+            this.badQueries.push(response.query)
       }
       if (response.query === this.getQuery(this.currentValue)) {
         this.suggestions = response.suggestions
@@ -330,7 +328,7 @@
     activate: function(index) {
       var divs = this.container.children()
       // Clear previous selection:
-      if (this.selectedIndex !== -1 && divs.length > this.selectedIndex)
+      if ((-1 !== this.selectedIndex) && (divs.length > this.selectedIndex))
         $(divs.get(this.selectedIndex)).removeClass()
 
       this.selectedIndex = index
@@ -386,8 +384,7 @@
         this.container.scrollTop(offsetTop)
       else if (offsetTop > lowerBound)
         this.container.scrollTop(offsetTop - this.options.maxHeight + 25)
-
-      this.el.val(this.getValue(this.suggestions[i]))
+      this.el.val(this.getValue(this.options.searchPrefix + this.suggestions[i]))
     },
 
     onSelect: function(i) {
@@ -411,9 +408,14 @@
         return response + value
     },
       
-    formatResult: function(value, data, currentValue) {
-      var pattern = '(' + currentValue.replace(regEx, '\\$1') + ')'
-      return value.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
+    /**
+     * value: Data entered to autocomplete
+     * data: Matching data
+     */
+    formatResult: function(value, data) {
+      if (this.dataKey) data = data[this.dataKey]
+      var pattern = '(' + value.replace(this.regEx, '\\$1') + ')'
+      return data.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
     }
   }
   

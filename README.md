@@ -27,10 +27,11 @@ You can add extra options:
       params: { country: 'Yes' }, // additional parameters
       noCache: false, // default is false
       onSelect: function(value, data) { alert('You selected: ' + value + ', ' + data) },
-      lookup: ['January', 'February', 'March', 'April', 'May'] // local lookup values,
-      searchEverywhere: false // Search any part of data not just from beginning,
+      lookup: ['January', 'February', 'March', 'April', 'May'], // local lookup values
+      maxSuggestions: null, // Maximum suggestions to display (applies to local results only)
+      searchEverywhere: false, // Search any part of data not just from beginning
                             // only applicable to local data lookups
-      prefix: ''  // Only start autocompleting after this character e.g. '@' or '+',
+      prefix: '',  // Only start autocompleting after this character e.g. '@' or '+'
       dataKey: 'data' // Provide values as objects and use this key as the inserted data.
                     // Allows users to specify a template for autocomplete suggestions
     })
@@ -71,12 +72,12 @@ If you need to pass additional parameters, you can set them via setOptions too:
 
 ### Formatting results
 
-**formatResult**: function that formats values that are displayed in the autosuggest list. It takes three parameters: suggested value, data and current query value. Default function for this:
+**formatResult**: function that formats values that are displayed in the autosuggest list. It takes two parameters: data we are attempting to autocomplete on and matching data entry. Default function for this:
 
-    var reEscape = new RegExp('(\\' + ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].join('|\\') + ')', 'g')
     function formatResult(value, data, currentValue) {
-      var pattern = '(' + currentValue.replace(reEscape, '\\$1') + ')'
-      return value.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
+      if (this.dataKey) data = data[this.dataKey]
+      var pattern = '(' + value.replace(this.regEx, '\\$1') + ')'
+      return data.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
     }
 
 ### Styling
