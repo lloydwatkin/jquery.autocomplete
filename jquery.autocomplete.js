@@ -5,13 +5,11 @@
  * Heavily modified from http://www.devbridge.com/projects/autocomplete/jquery/
  */
 (function($) {
-
-  var regEx = new RegExp('(\\' + ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\'].join('|\\') + ')', 'g')
-
-  function formatResult(value, data, currentValue) {
-    var pattern = '(' + currentValue.replace(regEx, '\\$1') + ')'
-    return value.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
-  }
+  var regEx = new RegExp(
+      '(\\' + ['/', '.', '*', '+', '?', '|', '(', ')', '[', ']', '{', '}', '\\']
+          .join('|\\') + ')',
+      'g'
+  )
 
   function Autocomplete(el, options) {
 
@@ -33,14 +31,14 @@
       minChars: 1,
       maxHeight: 300,
       deferRequestBy: 0,
-      width: 0,
+      width: 300,
       highlight: true,
       params: {},
       dataKey: null,
-      formatResult: formatResult,
-      delimiter: null,
+      formatResult: this.formatResult,
+      delimiter: ' ',
       zIndex: 9999,
-      prefix: '',
+      searchPrefix: '',
       searchEverywhere: false,
       appendSpace: true
     }
@@ -50,9 +48,8 @@
   }
   
   $.fn.autocomplete = function(options) {
-    return new Autocomplete(this.get(0)||$('<input />'), options)
+    return new Autocomplete(this.get(0) || $('<input />'), options)
   }
-
 
   Autocomplete.prototype = {
 
@@ -60,10 +57,9 @@
 
     initialize: function() {
 
-      var uid, autocompleteElId
       var self = this
-      uid = Math.floor(Math.random()*0x100000).toString(16)
-      autocompleteElId = 'Autocomplete_' + uid
+      var uid = Math.floor(Math.random() * 0x100000).toString(16)
+      var autocompleteElementId = 'Autocomplete_' + uid
 
       this.killerFn = function(e) {
         if (0 === $(e.target).parents('.autocomplete').size()) {
@@ -75,11 +71,13 @@
       if (!this.options.width) this.options.width = this.el.width()
       this.mainContainerId = 'AutocompleteContainter_' + uid
 
-      $('<div id="' + this.mainContainerId + '" style="position:absolute;z-index:9999;">' +
-        '<div class="autocomplete-w1"><div class="autocomplete" id="' + autocompleteElId +
-        '" style="display:none; width:300px;"></div></div></div>').appendTo('body')
+      $('<div id="' + this.mainContainerId +
+        '" style="position:absolute;z-index:9999;">' +
+        '<div class="autocomplete-w1"><div class="autocomplete" id="' +
+        autocompleteElementId + '" style="display:none; width:300px;"></div></div></div>')
+        .appendTo('body')
 
-      this.container = $('#' + autocompleteElId)
+      this.container = $('#' + autocompleteElementId)
       this.fixPosition()
       if (window.opera)
         this.el.keypress(function(e) { self.onKeyPress(e) })
@@ -92,15 +90,15 @@
     },
     
     template: function(entry, formatResult, currentValue, suggestion) {
-      return formatResult(suggestion, entry, currentValue)
+      return this.options.formatResult(suggestion, entry, currentValue)
     },
     
-    setOptions: function(options){
+    setOptions: function(options) {
       var o = this.options
       $.extend(o, options)
       
       if (o.lookup) this.setLookup(o.lookup)
-      $('#' + this.mainContainerId).css({ zIndex:o.zIndex })
+      $('#' + this.mainContainerId).css({ zIndex: o.zIndex })
       this.container.css({ maxHeight: o.maxHeight + 'px', width: o.width })
     },
     
@@ -136,14 +134,14 @@
     },
 
     disableKillerFn: function() {
-      var me = this
-      $(document).unbind('click', me.killerFn)
+      var self = this
+      $(document).unbind('click', self.killerFn)
     },
 
     killSuggestions: function() {
       var self = this
       this.stopKillSuggestions()
-      this.intervalId = window.setInterval(function() { 
+      this.intervalId = window.setInterval(function() {
           self.hide()
           self.stopKillSuggestions()
       }, 300)
@@ -155,7 +153,6 @@
 
     onKeyPress: function(e) {
       if (this.disabled || !this.enabled) return
-
 
       switch (e.keyCode) {
         case 27: // ESC:
@@ -193,7 +190,10 @@
       var self = this
       if (this.currentValue !== this.el.val()) {
         if (this.options.deferRequestBy > 0)
-          this.onChangeInterval = setInterval(function() { self.onValueChange() }, this.options.deferRequestBy)
+          this.onChangeInterval = setInterval(
+              function() { self.onValueChange() },
+              this.options.deferRequestBy
+          )
         else
           this.onValueChange()
       }
@@ -215,34 +215,34 @@
     },
 
     getQuery: function(val) {
+//          console.log(this.options.prefix, prefixLength, val, this.options.delimiter)
       var d = this.options.delimiter
       if (!d) { return $.trim(val) }
       var arr = val.split(d)
-      query = $.trim(arr[arr.length - 1])
-      if (query.substring(0, this.options.prefix.length) == this.options.prefix)
-         return query.substring(this.options.prefix.length)
+      var query = $.trim(arr[arr.length - 1])
+      var prefixLength = this.options.searchPrefix.length
+      if (query.substring(0, prefixLength) == this.options.searchPrefix)
+         return query.substring(this.options.searchPrefix.length)
       return ''
     },
 
     getSuggestionsLocal: function(q) {
-      var val
       var arr = this.options.lookup.suggestions
       var ret = { suggestions: [], data: [] }
-      var q   = q.toLowerCase()
+      q       = q.toLowerCase()
       for (var index in arr) {
-        val = arr[index]
-	      if (typeof(val) == 'object')
-	          val = val[this.options.dataKey]
-	      var indexSearch   = 0
-	      var indexPosition = val.toLowerCase().indexOf(q)
-	      var addData = false
-	      if ((true == this.options.searchEverywhere) && (indexPosition > -1))
-	          addData = true
-	      else if (0 === indexPosition)
-	          addData = true
+        var val = arr[index]
+        if (typeof(val) == 'object')
+          val = val[this.options.dataKey]
+        var indexPosition = val.toLowerCase().indexOf(q)
+        var addData = false
+        if ((true === this.options.searchEverywhere) && (indexPosition > -1))
+          addData = true
+        else if (0 === indexPosition)
+          addData = true
         if (true === addData) {
-            ret.suggestions.push(val)
-            ret.data.push(this.options.lookup.data[index])
+          ret.suggestions.push(val)
+          ret.data.push(this.options.lookup.data[index])
         }
       }
       return ret
@@ -257,7 +257,9 @@
         this.suggest()
       } else if (!this.isBadQuery(q)) {
         this.options.params.query = q
-        $.get(this.serviceUrl, this.options.params, function(txt) { self.processResponse(txt) }, 'text')
+        $.get(this.serviceUrl, this.options.params, function(txt) {
+            self.processResponse(txt)
+        }, 'text')
       }
     },
 
@@ -291,11 +293,13 @@
       this.container.hide().empty()
       for (var i = 0; i < len; i++) {
         s = this.suggestions[i]
-		    entry = this.data[i]
-    		if ((typeof(entry) == 'object') && (typeof(this.options.dataKey) != 'undefined'))
-    		  entry = entry[this.options.dataKey]
-        div = $((me.selectedIndex === i ?
-            '<div class="selected"' : '<div') + ' title="' + s + '">' + this.template(entry, f, v, s) + '</div>')
+        var entry = this.data[i]
+        if ((typeof(entry) == 'object') && (typeof(this.options.dataKey) != 'undefined'))
+            entry = entry[this.options.dataKey]
+        div = $((self.selectedIndex === i ?
+            '<div class="selected"' : '<div') + ' title="' + s + '">' +
+            this.template(entry, f, v, s) + '</div>'
+        )
         div.mouseover(mOver(i))
         div.click(mClick(i))
         this.container.append(div)
@@ -307,8 +311,8 @@
     processResponse: function(text) {
       var response
       try {
-        response = eval('(' + text + ')')
-      } catch (err) { 
+        response = JSON.parse(text)
+      } catch (err) {
         return
       }
       if (!$.isArray(response.data)) { response.data = [] }
@@ -387,25 +391,30 @@
     },
 
     onSelect: function(i) {
-      var fn  = this.options.onSelect
-      var s   = this.suggestions[i]
-      var d   = this.data[i]
-      var val = this.getValue(s)
-      if (true == this.options.appendSpace) val = val + ' '
+      var self = this
+      var fn   = this.options.onSelect
+      var s    = this.suggestions[i]
+      var d    = this.data[i]
+      var val  = this.getValue(s)
+      if (true === this.options.appendSpace) val = val + ' '
       this.el.val(val)
-      if ($.isFunction(fn)) { fn(s, d, me.el) }
+      if ($.isFunction(fn)) { fn(s, d, self.el) }
     },
     
     getValue: function(value) {
-        var del = me.options.delimiter
+        var del = this.options.delimiter
         if (!del) return value
         var currVal = this.currentValue
         var arr = currVal.split(del)
         if (1 === arr.length) return value
-        response = currVal.substr(0, currVal.length - arr[arr.length - 1].length) + value
-        return response
+        var response = currVal.substr(0, currVal.length - arr[arr.length - 1].length)
+        return response + value
+    },
+      
+    formatResult: function(value, data, currentValue) {
+      var pattern = '(' + currentValue.replace(regEx, '\\$1') + ')'
+      return value.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
     }
-
   }
-
-}(jQuery))
+  
+})(jQuery)
