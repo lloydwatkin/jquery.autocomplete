@@ -19,7 +19,8 @@ You can add extra options:
     var a = $('#query').autocomplete({
       serviceUrl: 'service/autocomplete.ashx',
       minChars: 2,
-      delimiter: /(,|;)\s*/, // regex or character
+      delimiter: /(,|;)\s*/, // regex or character - pass null for single word autocomplete
+      appendChars: ' ',
       maxHeight: 400,
       width: 300, 
       zIndex: 9999,
@@ -34,9 +35,12 @@ You can add extra options:
       prefix: '',  // Only start autocompleting after this character e.g. '@' or '+'
       dataKey: 'data' // Provide values as objects and use this key as the inserted data.
                     // Allows users to specify a template for autocomplete suggestions
+      searchKey: 'search' // Search on this data field
     })
   
 Use **lookup** option only if you prefer to inject an array of autocompletion options, rather than sending Ajax queries.
+
+If your `lookup` values are objects then you <strong>must</strong> provide values for `dataKey` and `searchKey`.
 
 ### Ajax Responses
 

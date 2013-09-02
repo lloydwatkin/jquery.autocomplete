@@ -39,7 +39,7 @@
       zIndex: 9999,
       searchPrefix: '',
       searchEverywhere: false,
-      appendSpace: true,
+      appendChars: ' ',
     }
     this.initialize()
     this.setOptions(options)
@@ -229,10 +229,11 @@
       var arr = this.options.lookup.suggestions
       var ret = { suggestions: [], data: [] }
       q       = q.toLowerCase()
+
       for (var index in arr) {
         var val = arr[index]
         if ('object' === typeof(val))
-          val = val[this.options.dataKey]
+          val = val[this.options.searchKey]
         var indexPosition = val.toLowerCase().indexOf(q)
         var addData = false
         if ((true === this.options.searchEverywhere) && (indexPosition > -1))
@@ -289,10 +290,9 @@
       this.container.hide().empty()
       for (var i = 0; i < len; i++) {
         s = this.suggestions[i]
-        var entry = this.data[i]
         if ((typeof(entry) === 'object') &&
             (typeof(this.options.dataKey) !== 'undefined'))
-            entry = entry[this.options.dataKey]
+            s = this.data[i][this.options.dataKey]
         div = $((self.selectedIndex === i ?
             '<div class="selected"' : '<div') + ' title="' + s + '">' +
             this.template(v, this.data[i]) + '</div>'
@@ -347,16 +347,15 @@
 
     select: function(i) {
       var selectedValue = this.suggestions[i]
-      if (selectedValue) {
-        this.el.val(selectedValue)
-        if (this.options.autoSubmit) {
-          var f = this.el.parents('form')
-          if (f.length > 0) { f.get(0).submit() }
-        }
-        this.ignoreValueChange = true
-        this.hide()
-        this.onSelect(i)
+      if (!selectedValue) return
+      this.el.val(selectedValue)
+      if (this.options.autoSubmit) {
+        var f = this.el.parents('form')
+        if (f.length > 0) { f.get(0).submit() }
       }
+      this.ignoreValueChange = true
+      this.hide()
+      this.onSelect(i)
     },
 
     moveUp: function() {
@@ -393,7 +392,9 @@
       var s    = this.suggestions[i]
       var d    = this.data[i]
       var val  = this.getValue(s)
-      if (true === this.options.appendSpace) val = val + ' '
+      if ('object' === typeof(this.data[i]))
+        val = this.data[i][this.options.dataKey]
+      if (this.options.appendSpace) val = val + this.options.appendChars
       this.el.val(val)
       if ($.isFunction(fn)) { fn(s, d, self.el) }
     },
