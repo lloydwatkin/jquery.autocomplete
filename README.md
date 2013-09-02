@@ -72,9 +72,9 @@ If you need to pass additional parameters, you can set them via setOptions too:
 
 ### Formatting results
 
-**formatResult**: function that formats values that are displayed in the autosuggest list. It takes two parameters: data we are attempting to autocomplete on and matching data entry. Default function for this:
+**formatResult**: function that formats values that are displayed in the autosuggest list. It takes three parameters: data we are attempting to autocomplete on, matching data entry, the third being the context of the Autocomplete object in case you want to use the matching regex. Default function for this:
 
-    function formatResult(value, data, currentValue) {
+    function formatResult(value, data, context) {
       if (this.dataKey) data = data[this.dataKey]
       var pattern = '(' + value.replace(this.regEx, '\\$1') + ')'
       return data.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
