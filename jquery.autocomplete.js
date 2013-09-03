@@ -393,8 +393,8 @@
       var d    = this.data[i]
       var val  = this.getValue(s)
       if ('object' === typeof(this.data[i]))
-        val = this.data[i][this.options.dataKey]
-      if (this.options.appendSpace) val = val + this.options.appendChars
+        val = this.getValue(this.data[i][this.options.dataKey])
+      if (this.options.appendChars) val = val + this.options.appendChars
       this.el.val(val)
       if ($.isFunction(fn)) { fn(s, d, self.el) }
     },
