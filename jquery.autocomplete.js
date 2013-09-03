@@ -234,7 +234,8 @@
         var val = arr[index]
         if ('object' === typeof(val))
           val = val[this.options.searchKey]
-        var indexPosition = val.toLowerCase().indexOf(q)
+        var indexPosition = (val  + ' ' + arr[index][this.options.dataKey])
+            .toLowerCase().indexOf(q)
         var addData = false
         if ((true === this.options.searchEverywhere) && (indexPosition > -1))
           addData = true
