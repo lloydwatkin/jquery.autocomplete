@@ -40,7 +40,8 @@ You can add extra options:
   
 Use **lookup** option only if you prefer to inject an array of autocompletion options, rather than sending Ajax queries.
 
-If your `lookup` values are objects then you <strong>must</strong> provide values for `dataKey` and `searchKey`.
+If your `lookup` values are objects then you <strong>must</strong> provide values for `dataKey` and `searchKey`. 
+Note: Autocomplete uses both data in `dataKey` and `searchKey` to find suggestions.
 
 ### Ajax Responses
 
