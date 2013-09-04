@@ -18,7 +18,7 @@
     this.data = []
     this.badQueries = []
     this.selectedIndex = -1
-    this.currentValue = this.el.val()
+    this.currentValue = this.el.val() || this.el.html()
     this.intervalId = 0
     this.cachedResponse = []
     this.onChangeInterval = null
@@ -188,7 +188,8 @@
       }
       clearInterval(this.onChangeInterval)
       var self = this
-      if (this.currentValue !== this.el.val()) {
+      var value = this.el.val() || this.el.html()
+      if (this.currentValue !== value) {
         if (this.options.deferRequestBy > 0)
           this.onChangeInterval = setInterval(
               function() { self.onValueChange() },
@@ -201,7 +202,7 @@
 
     onValueChange: function() {
       clearInterval(this.onChangeInterval)
-      this.currentValue = this.el.val()
+      this.currentValue = this.el.val() || this.el.html()
       var q = this.getQuery(this.currentValue)
       this.selectedIndex = -1
       if (this.ignoreValueChange) {
@@ -396,7 +397,10 @@
       if ('object' === typeof(this.data[i]))
         val = this.getValue(this.data[i][this.options.dataKey])
       if (this.options.appendChars) val = val + this.options.appendChars
-      this.el.val(val)
+      if (this.el.html)
+          this.el.html(val)
+      else
+          this.el.val(val)
       if ($.isFunction(fn)) { fn(s, d, self.el) }
     },
     
