@@ -18,7 +18,7 @@
     this.data = []
     this.badQueries = []
     this.selectedIndex = -1
-    this.currentValue = this.el.val() || this.el.html()
+    this.currentValue = this.isFormField() ? this.el.val() : this.el.html()
     this.intervalId = 0
     this.cachedResponse = []
     this.onChangeInterval = null
@@ -188,7 +188,7 @@
       }
       clearInterval(this.onChangeInterval)
       var self = this
-      var value = this.el.val() || this.el.html()
+      var value = this.isFormField() ? this.el.val() : this.el.html()
       if (this.currentValue !== value) {
         if (this.options.deferRequestBy > 0)
           this.onChangeInterval = setInterval(
@@ -202,7 +202,7 @@
 
     onValueChange: function() {
       clearInterval(this.onChangeInterval)
-      this.currentValue = this.el.val() || this.el.html()
+      this.currentValue = this.isFormField() ? this.el.val() : this.el.html()
       var q = this.getQuery(this.currentValue)
       this.selectedIndex = -1
       if (this.ignoreValueChange) {
@@ -397,11 +397,16 @@
       if ('object' === typeof(this.data[i]))
         val = this.getValue(this.data[i][this.options.dataKey])
       if (this.options.appendChars) val = val + this.options.appendChars
-      if (this.el.html)
-          this.el.html(val)
-      else
+      if (this.isFormField())
           this.el.val(val)
+      else
+          this.el.html(val)
+
       if ($.isFunction(fn)) { fn(s, d, self.el) }
+    },
+      
+    isFormField: function() {
+        return this.el.is('input') || this.el.is('textarea')
     },
     
     getValue: function(value) {
