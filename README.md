@@ -97,6 +97,7 @@ This is achieved by passing a function as the `insertDomContent` key. Default fu
       var val = context.getValue(suggestion)
       if ('object' === typeof(data))
         val = context.getValue(data[context.options.dataKey])
+      if (context.options.appendChars) val = val + context.options.appendChars
       return val
     },
 ```
