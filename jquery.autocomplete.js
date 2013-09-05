@@ -395,7 +395,6 @@
       var s    = this.suggestions[i]
       var d    = this.data[i]
       var val  = this.options.insertDomContent(d, s, this)
-      if (this.options.appendChars) val = val + this.options.appendChars
       if (this.isFormField())
           this.el.val(val)
       else
@@ -408,6 +407,7 @@
       var val = context.getValue(suggestion)
       if ('object' === typeof(data))
         val = context.getValue(data[context.options.dataKey])
+      if (context.options.appendChars) val = val + context.options.appendChars
       return val
     },
       
