@@ -282,7 +282,7 @@
     suggest: function() {
       if (0 === this.suggestions.length)
         return this.hide()
-        
+      this.fixPosition()  
       var div, s
       var self = this
       var len = this.suggestions.length
