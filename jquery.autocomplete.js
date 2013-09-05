@@ -40,6 +40,7 @@
       searchPrefix: '',
       searchEverywhere: false,
       appendChars: ' ',
+      insertDomContent: this.insertDomContent
     }
     this.initialize()
     this.setOptions(options)
@@ -393,9 +394,7 @@
       var fn   = this.options.onSelect
       var s    = this.suggestions[i]
       var d    = this.data[i]
-      var val  = this.getValue(s)
-      if ('object' === typeof(this.data[i]))
-        val = this.getValue(this.data[i][this.options.dataKey])
+      var val  = this.options.insertDomContent(d, s, this)
       if (this.options.appendChars) val = val + this.options.appendChars
       if (this.isFormField())
           this.el.val(val)
@@ -403,6 +402,13 @@
           this.el.html(val)
 
       if ($.isFunction(fn)) { fn(s, d, self.el) }
+    },
+      
+    insertDomContent: function(data, suggestion, context) {
+      var val = context.getValue(suggestion)
+      if ('object' === typeof(data))
+        val = context.getValue(data[context.options.dataKey])
+      return val
     },
       
     isFormField: function() {

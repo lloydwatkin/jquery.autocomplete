@@ -1,7 +1,7 @@
 jquery.autocomplete
 ===================
 
-Autocomplete on any element. Data source can be an ajax query response or from provided data. 
+Autocomplete on any element*. Data source can be an ajax query response or from provided data. 
 
 ## How to use
 
@@ -79,16 +79,35 @@ If you need to pass additional parameters, you can set them via setOptions too:
 
 **formatResult**: function that formats values that are displayed in the autosuggest list. It takes three parameters: data we are attempting to autocomplete on, matching data entry, the third being the context of the Autocomplete object in case you want to use the matching regex. Default function for this:
 
+```javascript
     function formatResult(value, data, context) {
       if (this.dataKey) data = data[this.dataKey]
       var pattern = '(' + value.replace(this.regEx, '\\$1') + ')'
       return data.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
     }
+```
+
+### Insert special data into the DOM
+
+Rather that simply insert the autcompleted data it is also possible to pass in a function to handle data insertion. 
+This is achieved by passing a function as the `insertDomContent` key. Default function for this:
+
+```javascript
+    function(data, suggestion, context) {
+      var val = context.getValue(suggestion)
+      if ('object' === typeof(data))
+        val = context.getValue(data[context.options.dataKey])
+      return val
+    },
+```
+
+Note: Remember to call `context.getValue()` to get current input element contents.
 
 ### Styling
 
 Script generates the following HTML (sample query 'Ba'). Active element is marked with class "selected". You can style it any way you wish.
 
+```html
     <div class="autocomplete-w1">
       <div style="width:299px;" id="Autocomplete_1240430421731" class="autocomplete">
         <div><strong>Ba</strong>hamas</div>
@@ -98,13 +117,17 @@ Script generates the following HTML (sample query 'Ba'). Active element is marke
       </div>
     </div>
   
+```
+
 CSS: 
 
+```css
     .autocomplete-w1 { position: absolute; top: 0px; left: 0px; margin: 6px 0 0 6px; }
     .autocomplete { border: 1px solid #999; background: #FFF; cursor: default; text-align: left; max-height: 350px; overflow: auto; margin: -6px 6px 6px -6px; }
     .autocomplete .selected { background: #F0F0F0; }
     .autocomplete div { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
     .autocomplete strong { font-weight: normal; color: #3399FF; }
+```
 
 ## Licence 
 
@@ -113,3 +136,5 @@ MIT.
 ## Source
   
 This autocomplete has been updated and adapted from http://www.devbridge.com/projects/autocomplete/jquery/.
+
+* Keyboard not currently working for non-form input types
