@@ -87,6 +87,14 @@ If you need to pass additional parameters, you can set them via setOptions too:
     }
 ```
 
+## Cleaning up
+
+In order to remove the element once you are done simply do:
+
+```
+    ac.remove()
+```
+
 ### Insert special data into the DOM
 
 Rather that simply insert the autcompleted data it is also possible to pass in a function to handle data insertion. 

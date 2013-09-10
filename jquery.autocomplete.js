@@ -434,7 +434,11 @@
       if (this.dataKey) data = data[this.dataKey]
       var pattern = '(' + value.replace(this.regEx, '\\$1') + ')'
       return data.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
-    }
+    },
+
+    remove: function() {
+        $('#' + this.mainContainerId).remove()
+    },
   }
   
 })(jQuery)
