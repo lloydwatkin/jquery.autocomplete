@@ -396,11 +396,12 @@
       var s    = this.suggestions[i]
       var d    = this.data[i]
       var val  = this.options.insertDomContent(d, s, this)
-      if (this.isFormField())
+      if (this.isFormField()) {
           this.el.val(val)
-      else
+      } else {
           this.el.html(val)
-
+      }
+      this.el.focus()
       if ($.isFunction(fn)) { fn(s, d, self.el) }
     },
       
