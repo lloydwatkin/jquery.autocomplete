@@ -398,11 +398,28 @@
       var val  = this.options.insertDomContent(d, s, this)
       if (this.isFormField()) {
           this.el.val(val)
+          this.selectRange(val.length)
       } else {
           this.el.html(val)
       }
       this.el.focus()
       if ($.isFunction(fn)) { fn(s, d, self.el) }
+    },
+
+    selectRange: function(start, end) {
+      if (!end) end = start
+      if (this.el[0].setSelectionRange) {
+          this.el.focus()
+          this.el[0].setSelectionRange(start, end)
+      } else if (this.el.createTextRange) {
+          var range = this.el.createTextRange()
+          range.collapse(true)
+          range.moveEnd('character', selectionEnd)
+          range.moveStart('character', selectionStart)
+          range.select()
+      } else {
+          console.debug('Unable to change caret position')
+      }
     },
       
     insertDomContent: function(data, suggestion, context) {
