@@ -1,0 +1,11 @@
+{
+  "name": "jquery.autocomplete",
+  "version": "1.0.0",
+  "devDependencies": {
+    "phantomjs": "~1.9.7-5",
+    "selenium-webdriver": "^2.41.0"
+  },
+  "scripts": {
+    "test": "phantomjs test/index.js"
+  }
+}
