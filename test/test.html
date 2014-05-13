@@ -4,10 +4,26 @@
     <title>jQuery autocomplete tests</title>
     <style>
       body { background: #222; color: #00ff22 }
+      .autocomplete-w1 { position: absolute; top: 0px; left: 0px; margin: 6px 0 0 6px; }
+      .autocomplete { border: 1px solid #999; background: #FFF; cursor: default; text-align: left; max-height: 350px; overflow: auto; margin: -6px 6px 6px -6px; }
+      .autocomplete .selected { background: #F0F0F0; }
+      .autocomplete div { padding: 2px 5px; white-space: nowrap; overflow: hidden; }
+    .autocomplete strong { font-weight: normal; color: #3399FF; }
     </style>
+    <script src="jquery-1.11.1.min.js"></script>
+    <script src="../jquery.autocomplete.js"></script>
   </head>
   <body>
-    <input type="text" id="autocomplete" />
-    <script src="../jquery.autocomplete.js"></script>
+
+    <h1>Standard static data test</h1>
+
+    <input id="test1" />
+    <script type="text/javascript">
+var a = $('#test1').autocomplete({
+  minChars: 2,
+  appendChars: ' ',
+  lookup: ['January', 'February', 'March', 'April', 'May'] 
+})
+    </script>
   </body>
 </html>
