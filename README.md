@@ -3,6 +3,19 @@ jquery.autocomplete
 
 Autocomplete on any element*. Data source can be an ajax query response or from provided data. 
 
+## Status
+
+[![Build Status](https://travis-ci.org/lloydwatkin/jquery.autocomplete.svg)](https://travis-ci.org/lloydwatkin/jquery.autocomplete)
+
+## Test
+
+```
+npm i -g phantomjs
+npm test
+```
+
+This kicks off selenium server and tests the library using phantomjs (later I'll include a headed browser for development).
+
 ## How to use
 
 Here is an autocomplete sample for the text field with id 'autocomplete':
