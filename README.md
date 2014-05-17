@@ -14,7 +14,11 @@ npm i -g phantomjs
 npm test
 ```
 
-This kicks off selenium server and tests the library using phantomjs (later I'll include a headed browser for development).
+This kicks off selenium server and tests the library using phantomjs. To use firefox for testing simply set an environment variable of __BROWSER__ with value **firefox**:
+
+```bash
+BROWSER=firefox npm test
+```
 
 ## How to use
 
@@ -66,7 +70,7 @@ Note: Autocomplete uses both data in `dataKey` and `searchKey` to find suggestio
 
 Responses from ajax requests much be in the following format:
 
-```json
+```javascript
     {
       query: 'Ba',
       suggestions: ['Bahamas', 'Bahrain', 'Bangladesh', 'Barbados'],
