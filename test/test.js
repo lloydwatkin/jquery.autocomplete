@@ -66,6 +66,23 @@ describe('Lookups', function() {
 
 describe('Autocomplete fill', function() {
   
+    it('Updates text box as I select values with arrow keys', function(done) {
+        browser.element('#test1').sendKeys('Ma')
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
+        browser.input('#test1').value(function(value) {
+            value.should.equal('March')
+        })
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
+        browser.input('#test1').value(function(value) {
+            value.should.equal('May')
+        })
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_UP)
+        browser.input('#test1').value(function(value) {
+            value.should.equal('March')
+            done()
+        }) 
+    })
+    
     it('Updates text box when clicking a value', function(done) {
         browser.element('#test1').sendKeys('Ma')
         browser.element('div.autocomplete div[title="March"]').click()
