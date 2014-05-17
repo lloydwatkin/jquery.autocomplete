@@ -5,21 +5,23 @@ var helper    = require('./helper')
 
 var browser
 
-beforeEach(function(done) {
+before(function(done) {
     helper.getBrowser(function(driver) {
         browser = driver
-        browser.get(process.cwd() + '/test/test.html')
+        browser.get('http://127.0.0.1:8080/test/test.html')
             .then(function() { done() })
     })
 })
 
-afterEach(function(done) {
-    browser.quit()
-    done()
+beforeEach(function(done) {
+    browser.input('#test1').clear()
+    browser.element('#test1').then(function() { done() })
 })
 
 after(function(done) {
-    helper.stopServer(done)
+    browser.quit().then(function() {
+        helper.stopServer(done)
+    })
 })
 
 describe('Lookups', function() {
