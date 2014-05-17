@@ -9,7 +9,7 @@ Autocomplete on any element*. Data source can be an ajax query response or from 
 
 ## Test
 
-```
+```bash
 npm i -g phantomjs
 npm test
 ```
@@ -20,15 +20,20 @@ This kicks off selenium server and tests the library using phantomjs (later I'll
 
 Here is an autocomplete sample for the text field with id 'autocomplete':
 
+```html
     <input type="text" name="q" id="autocomplete" />
-  
+```
+
 You can have multiple instances on a single page.
 
+```javascript
      var options = { serviceUrl: 'service/autocomplete.ashx' }
      var a = $('#autocomplete').autocomplete(options)
+```
 
 You can add extra options:
 
+```javascript
     var a = $('#query').autocomplete({
       serviceUrl: 'service/autocomplete.ashx',
       minChars: 2,
@@ -50,6 +55,7 @@ You can add extra options:
                     // Allows users to specify a template for autocomplete suggestions
       searchKey: 'search' // Search on this data field
     })
+```
   
 Use **lookup** option only if you prefer to inject an array of autocompletion options, rather than sending Ajax queries.
 
@@ -60,11 +66,13 @@ Note: Autocomplete uses both data in `dataKey` and `searchKey` to find suggestio
 
 Responses from ajax requests much be in the following format:
 
+```json
     {
       query: 'Ba',
       suggestions: ['Bahamas', 'Bahrain', 'Bangladesh', 'Barbados'],
       data: ['BHS', 'BHR', 'BGD', 'BRB']
     }
+```
 
 Notes:
 
@@ -76,17 +84,23 @@ Notes:
 
 Autocomplete functionality can be disabled or enabled programmatically.
 
+```javascript
     var ac = $('#query').autocomplete(options)
     ac.disable()
     ac.enable()
+```
   
 Options can be changed programmatically at any time, only options that are passed get set:
 
+```javascript
     ac.setOptions({ zIndex: 1001 });
+```
 
 If you need to pass additional parameters, you can set them via setOptions too:
 
+```javascript
     ac.setOptions({ params: { first: 'John', last: 'Doe' } })
+```
 
 ### Formatting results
 
@@ -104,7 +118,7 @@ If you need to pass additional parameters, you can set them via setOptions too:
 
 In order to remove the element once you are done simply do:
 
-```
+```javascript
     ac.remove()
 ```
 
