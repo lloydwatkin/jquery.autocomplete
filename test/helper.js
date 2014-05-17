@@ -40,5 +40,6 @@ var getBrowser = function(done) {
 
 module.exports = {
     getBrowser: getBrowser,
-    stopServer: stopServer
+    stopServer: stopServer,
+    Webdriver: Webdriver
 }
