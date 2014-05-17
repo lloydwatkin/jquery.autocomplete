@@ -1,9 +1,8 @@
 var Webdriver = require('selenium-webdriver')
 require('webdriverjs-helper')
 require('should')
-require('colors')
 
-var server
+var server = null
 
 var startServer = function(done) {
     SeleniumServer = require('selenium-webdriver/remote').SeleniumServer
