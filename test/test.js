@@ -87,7 +87,7 @@ describe('Autocomplete fill', function() {
     })
     
     it('Updates text box when clicking a value', function(done) {
-        browser.element('#test1').sendKeys('Ma')
+        browser.element('#test1').sendKeys('Mar')
         browser.element('div.autocomplete div[title="March"]').click()
         browser.input('input#test1').value(function(value) {
             value.should.equal('March')
@@ -95,4 +95,33 @@ describe('Autocomplete fill', function() {
         })
     })
     
+    it('Leaves autofill in place when I press space after highlighting', function(done) {
+        browser.element('#test1').sendKeys('Ma')
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.SPACE)
+        browser.input('#test1').value(function(value) {
+            value.should.equal('March ')
+            done()
+        })
+    })
+    
+    it('Adds autocomplete when I select entry and hit enter', function(done) {
+        browser.element('#test1').sendKeys('Ma')
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.ENTER)
+        browser.input('#test1').value(function(value) {
+            value.should.equal('March')
+            done()
+        })
+    })
+    
+    it('Adds autocomplete when I select entry and hit return', function(done) {
+        browser.element('#test1').sendKeys('Mar')
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.RETURN)
+        browser.input('#test1').value(function(value) {
+            value.should.equal('March')
+            done()
+        })
+    })
 })
