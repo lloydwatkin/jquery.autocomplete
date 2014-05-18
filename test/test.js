@@ -15,7 +15,10 @@ before(function(done) {
 
 beforeEach(function(done) {
     browser.input('#test1').clear()
-    browser.element('#test1').then(function() { done() })
+    browser.input('#test1').value(function(value) {
+        value.should.equal('')
+        done()
+    })
 })
 
 after(function(done) {
