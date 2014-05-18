@@ -116,7 +116,7 @@ describe('Autocomplete fill', function() {
     })
     
     it('Adds autocomplete when I select entry and hit return', function(done) {
-        browser.element('#test1').sendKeys('Mar')
+        browser.element('#test1').sendKeys('Ma')
         browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
         browser.element('#test1').sendKeys(helper.Webdriver.Key.RETURN)
         browser.input('#test1').value(function(value) {
@@ -124,4 +124,21 @@ describe('Autocomplete fill', function() {
             done()
         })
     })
+})
+
+describe('Display', function() {
+
+    it('Can be dismissed with ESC key', function(done) {
+        browser.element('#test1').sendKeys('Ma')
+        browser.elements('div.autocomplete div').count(function(length) {
+          length.should.equal(2)
+        })
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.ESCAPE)
+        helper.wait(browser, 10)
+        browser.element('div.autocomplete').isDisplayed(function(displayed) {
+            displayed.should.be.false
+            done()
+        })
+    })
+    
 })
