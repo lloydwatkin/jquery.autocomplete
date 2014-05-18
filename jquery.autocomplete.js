@@ -40,7 +40,8 @@
       searchPrefix: '',
       searchEverywhere: false,
       appendChars: ' ',
-      insertDomContent: this.insertDomContent
+      insertDomContent: this.insertDomContent,
+      disableMouseOver: false
     }
     this.initialize()
     this.setOptions(options)
@@ -162,7 +163,7 @@
           this.hide()
           break
         case 9:  // TAB
-        case 13: // RETURN:
+        case 13: // RETURN
           if (-1 === this.selectedIndex)
             return this.hide()
           this.select(this.selectedIndex)
@@ -192,13 +193,14 @@
       var self = this
       var value = this.isFormField() ? this.el.val() : this.el.html()
       if (this.currentValue !== value) {
-        if (this.options.deferRequestBy > 0)
+        if (this.options.deferRequestBy > 0) {
           this.onChangeInterval = setInterval(
               function() { self.onValueChange() },
               this.options.deferRequestBy
           )
-        else
+        } else {
           this.onValueChange()
+        }
       }
     },
 
@@ -211,10 +213,11 @@
         this.ignoreValueChange = false
         return
       }
-      if (('' === q) || (q.length < this.options.minChars))
+      if (('' === q) || (q.length < this.options.minChars)) {
         this.hide()
-      else
+      } else {
         this.getSuggestions(q)
+      }
     },
 
     getQuery: function(val) {
@@ -223,7 +226,7 @@
       if (!d) { return $.trim(val) }
       var arr = val.split(d)
       var query = $.trim(arr[arr.length - 1])
-      if (query.substring(0, prefixLength) == this.options.searchPrefix)
+      if (query.substring(0, prefixLength) === this.options.searchPrefix)
          return query.substring(this.options.searchPrefix.length)
       return ''
     },
@@ -301,7 +304,7 @@
             '<div class="selected"' : '<div') + ' title="' + s + '">' +
             this.template(v, this.data[i]) + '</div>'
         )
-        div.mouseover(mOver(i))
+        if (true !== this.options.disableMouseOver) div.mouseover(mOver(i))
         div.click(mClick(i))
         this.container.append(div)
       }
@@ -383,10 +386,11 @@
       var offsetTop = activeItem.offsetTop
       var upperBound = this.container.scrollTop()
       var lowerBound = upperBound + this.options.maxHeight - 25
-      if (offsetTop < upperBound)
+      if (offsetTop < upperBound) {
         this.container.scrollTop(offsetTop)
-      else if (offsetTop > lowerBound)
+      } else if (offsetTop > lowerBound) {
         this.container.scrollTop(offsetTop - this.options.maxHeight + 25)
+      }
       this.el.val(this.getValue(this.options.searchPrefix + this.suggestions[i]))
     },
 

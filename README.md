@@ -57,7 +57,8 @@ You can add extra options:
       prefix: '',  // Only start autocompleting after this character e.g. '@' or '+'
       dataKey: 'data' // Provide values as objects and use this key as the inserted data.
                     // Allows users to specify a template for autocomplete suggestions
-      searchKey: 'search' // Search on this data field
+      searchKey: 'search', // Search on this data field
+      disableMouseOver: false // If true don't update selected option on mouseover
     })
 ```
   
