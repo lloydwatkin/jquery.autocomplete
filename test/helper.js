@@ -46,8 +46,19 @@ var getBrowser = function(done) {
     return _getBrowser(done)
 }
 
+var wait = function(browser, time) {
+    var done = false
+    browser.wait(function() {
+        setTimeout(function() {
+            done = true
+        }, time)
+        return done
+    })
+}
+
 module.exports = {
     getBrowser: getBrowser,
     stopServer: stopServer,
-    Webdriver: Webdriver
+    Webdriver: Webdriver,
+    wait: wait
 }
