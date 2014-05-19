@@ -81,10 +81,11 @@
 
       this.container = $('#' + autocompleteElementId)
       this.fixPosition()
-      if (window.opera)
+      if (window.opera) {
         this.el.keypress(function(e) { self.onKeyPress(e) })
-      else
+      } else {
         this.el.keydown(function(e) { self.onKeyPress(e) })
+      }
 
       this.el.keyup(function(e) { self.onKeyUp(e) })
       this.el.blur(function() { self.enableKillerFn() })
@@ -164,6 +165,8 @@
           break
         case 9:  // TAB
         case 13: // RETURN
+          if (1 === this.suggestions.length) return this.select(0)
+
           if (-1 === this.selectedIndex)
             return this.hide()
           this.select(this.selectedIndex)

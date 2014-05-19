@@ -124,6 +124,20 @@ describe('Autocomplete fill', function() {
             done()
         })
     })
+    
+    /* Firefox seems to like RETURN, phantomjs likes ENTER, so send both */
+    it('Hitting enter when there\'s only one option adds that meeting', function(done) {
+        browser.element('#test1').sendKeys('Mar')
+        browser.elements('div.autocomplete div').count(function(length) {
+          length.should.equal(1)
+        })
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.RETURN + helper.Webdriver.Key.ENTER)
+        browser.input('#test1').value(function(value) {
+            value.should.equal('March')
+            done()
+        })
+    })
+    
 })
 
 describe('Display', function() {
