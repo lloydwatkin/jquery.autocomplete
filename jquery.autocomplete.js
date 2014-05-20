@@ -159,24 +159,27 @@
       if (this.disabled || !this.enabled) return
 
       switch (e.keyCode) {
-        case 27: // ESC:
+        case 27: /* ESC */
           this.el.val(this.currentValue)
           this.hide()
           break
-        case 9:  // TAB
-        case 13: // RETURN
+        case 9:  /* TAB */
+        case 13: /* RETURN */
           if (1 === this.suggestions.length) return this.select(0)
 
-          if (-1 === this.selectedIndex)
-            return this.hide()
+          if (-1 === this.selectedIndex) return this.hide()
           this.select(this.selectedIndex)
           if (9 === e.keyCode) return
           break
-        case 38: // UP:
-          this.moveUp()
+        case 38: /* UP */
+          this.moveUp() 
           break
-        case 40: // DOWN:
+        case 40: /* DOWN */
           this.moveDown()
+          break
+        case 32: /* SPACE */
+          if (-1 === this.selectedIndex) break
+          this.select(this.selectedIndex)
           break
         default:
           return

@@ -96,7 +96,7 @@ describe('Autocomplete fill', function() {
         browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
         browser.element('#test1').sendKeys(helper.Webdriver.Key.SPACE)
         browser.input('#test1').value(function(value) {
-            value.should.equal('March ')
+            value.should.equal('March')
             done()
         })
     })
@@ -138,7 +138,7 @@ describe('Autocomplete fill', function() {
 
 describe('Display', function() {
 
-    it.skip('Can be dismissed with ESC key', function(done) {
+    it('Can be dismissed with ESC key', function(done) {
         browser.element('#test1').sendKeys('Ma')
         browser.elements('div.autocomplete div').count(function(length) {
           length.should.equal(2)
@@ -176,6 +176,23 @@ describe('Substituting different data', function() {
     it('Substitutes alternative values', function(done) {
         browser.element('#test2').sendKeys('Mar')
         browser.element('#test2').sendKeys(helper.Webdriver.Key.RETURN + helper.Webdriver.Key.ENTER)
+        browser.input('#test2').value(function(value) {
+            value.should.equal('3rd month')
+            done()
+        })
+    })
+    
+    it('If option is selected and space is pressed then alternative data substitution takes place', function(done) {
+        browser.element('#test2').sendKeys('Ma')
+        browser.element('#test2').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
+        
+        browser.input('#test2').value(function(value) {
+            value.should.equal('March')
+        })
+        browser.element('div.autocomplete div.selected').html(function(html) {
+            html.should.equal('<strong>Ma</strong>rch (3rd month)')
+        })
+        browser.element('#test2').sendKeys(helper.Webdriver.Key.SPACE)
         browser.input('#test2').value(function(value) {
             value.should.equal('3rd month')
             done()
