@@ -107,7 +107,7 @@
     
     setLookup: function(lookup) {
         this.isLocal = true
-        if ($.isArray(lookup) || $.isObject(lookup))
+        if ($.isArray(lookup) || $.isPlainObject(lookup))
             this.options.lookup = { suggestions: lookup, data: [] }
     },
     
@@ -241,15 +241,17 @@
 
       for (var index in arr) {
         var val = arr[index]
-        if ('object' === typeof(val))
+        if ('object' === typeof(val)) {
           val = val[this.options.searchKey]
+        }
         var indexPosition = (val  + ' ' + arr[index][this.options.dataKey])
             .toLowerCase().indexOf(q)
         var addData = false
-        if ((true === this.options.searchEverywhere) && (indexPosition > -1))
+        if ((true === this.options.searchEverywhere) && (indexPosition > -1)) {
           addData = true
-        else if (0 === indexPosition)
+        } else if (0 === indexPosition) {
           addData = true
+        }
         if (true === addData) {
           ret.suggestions.push(val)
           ret.data.push(arr[index])
@@ -456,8 +458,12 @@
      * data: Matching data
      */
     formatResult: function(value, data) {
+      var search = (this.searchKey) ? data[this.searchKey] : ''
       if (this.dataKey) data = data[this.dataKey]
       var pattern = '(' + value.replace(this.regEx, '\\$1') + ')'
+      if (this.searchKey) {
+          return ((search + ' (' + data).replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>') + ')')
+      }
       return data.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
     },
 

@@ -8,17 +8,13 @@ var browser
 before(function(done) {
     helper.getBrowser(function(driver) {
         browser = driver
-        browser.get('http://127.0.0.1:8080/test/test.html')
-            .then(function() { done() })
+        done()
     })
 })
 
 beforeEach(function(done) {
-    browser.input('#test1').clear()
-    browser.input('#test1').value(function(value) {
-        value.should.equal('')
-        done()
-    })
+    browser.get('http://127.0.0.1:8080/test/test.html')
+        .then(function() { done() })
 })
 
 after(function(done) {
@@ -142,7 +138,7 @@ describe('Autocomplete fill', function() {
 
 describe('Display', function() {
 
-    it('Can be dismissed with ESC key', function(done) {
+    it.skip('Can be dismissed with ESC key', function(done) {
         browser.element('#test1').sendKeys('Ma')
         browser.elements('div.autocomplete div').count(function(length) {
           length.should.equal(2)
@@ -155,4 +151,35 @@ describe('Display', function() {
         })
     })
     
+})
+
+describe('Substituting different data', function() {
+
+    it('Displays both \'search\' and \'data\' when used', function(done) {
+        browser.element('#test2').sendKeys('Ma')
+        browser.elements('div.autocomplete div').count(function(length) {
+          length.should.equal(2)
+        })
+        browser.elements('div.autocomplete div').get(0, function(element) {
+            element.html(function(html) {
+                html.should.include('<strong>Ma</strong>rch (3rd month)')
+            })
+        })
+        browser.elements('div.autocomplete div').get(1, function(element) {
+            element.html(function(html) {
+                html.should.include('<strong>Ma</strong>y (5th month)')
+                done()
+            })
+        })
+    })
+    
+    it('Substitutes alternative values', function(done) {
+        browser.element('#test2').sendKeys('Mar')
+        browser.element('#test2').sendKeys(helper.Webdriver.Key.RETURN + helper.Webdriver.Key.ENTER)
+        browser.input('#test2').value(function(value) {
+            value.should.equal('3rd month')
+            done()
+        })
+    })
+        
 })

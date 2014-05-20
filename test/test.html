@@ -18,12 +18,34 @@
     <h1>Standard static data test</h1>
 
     <input id="test1" value="" />
+      
     <script type="text/javascript">
 var a = $('#test1').autocomplete({
   minChars: 2,
   appendChars: '',
   disableMouseOver: true,
-  lookup: ['January', 'February', 'March', 'April', 'May'] 
+  lookup: ['January', 'February', 'March', 'April', 'May']
+})
+    </script>
+      
+    <h1>Alternative substitution test</h1>
+      
+    <input id="test2" value="" />
+      
+    <script type="text/javascript">
+var b = $('#test2').autocomplete({
+  minChars: 2,
+  appendChars: '',
+  disableMouseOver: true,
+  lookup: [
+      { search: 'January', data: '1st month' },
+      { search: 'Feburary', data: '2nd month' },
+      { search: 'March', data: '3rd month' },
+      { search: 'April', data: '4th month' },
+      { search: 'May', data: '5th month' }
+  ], 
+  dataKey: 'data',
+  searchKey: 'search'
 })
     </script>
   </body>

@@ -112,12 +112,15 @@ If you need to pass additional parameters, you can set them via setOptions too:
 **formatResult**: function that formats values that are displayed in the autosuggest list. It takes three parameters: data we are attempting to autocomplete on, matching data entry, the third being the context of the Autocomplete object in case you want to use the matching regex. Default function for this:
 
 ```javascript
-    function formatResult(value, data, context) {
+    formatResult: function(value, data) {
+      var search = (this.searchKey) ? data[this.searchKey] : ''
       if (this.dataKey) data = data[this.dataKey]
       var pattern = '(' + value.replace(this.regEx, '\\$1') + ')'
-      return data.replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>')
-    }
+      return ((search + ' (' + data).replace(new RegExp(pattern, 'gi'), '<strong>$1<\/strong>') + ')')
+    },
 ```
+
+e.g. ```January (1st month)```
 
 ## Cleaning up
 
@@ -143,6 +146,24 @@ This is achieved by passing a function as the `insertDomContent` key. Default fu
 ```
 
 Note: Remember to call `context.getValue()` to get current input element contents.
+
+When doing local lookups the options object should use the following format:
+
+```javascript
+{
+  lookup: [
+      { search: 'January', data: '1st month' },
+      { search: 'Feburary', data: '2nd month' },
+      { search: 'March', data: '3rd month' },
+      { search: 'April', data: '4th month' },
+      { search: 'May', data: '5th month' }
+  ], 
+  dataKey: 'data',
+  searchKey: 'search'
+}
+```
+
+For 'January' for example on autocomplete selection '1st month' will be substituted into the autocomplete target.
 
 ### Styling
 
