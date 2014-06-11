@@ -165,10 +165,13 @@
           break
         case 9:  /* TAB */
         case 13: /* RETURN */
-          if (1 === this.suggestions.length) return this.select(0)
-
-          if (-1 === this.selectedIndex) return this.hide()
-          this.select(this.selectedIndex)
+          if (1 === this.suggestions.length) {
+              this.select(0)
+          } else if (-1 === this.selectedIndex) {
+              return this.hide()
+          } else {
+              this.select(this.selectedIndex)
+          }
           if (9 === e.keyCode) return
           break
         case 38: /* UP */
