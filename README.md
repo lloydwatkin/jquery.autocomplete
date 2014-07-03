@@ -58,7 +58,8 @@ You can add extra options:
       dataKey: 'data' // Provide values as objects and use this key as the inserted data.
                     // Allows users to specify a template for autocomplete suggestions
       searchKey: 'search', // Search on this data field
-      disableMouseOver: false // If true don't update selected option on mouseover
+      disableMouseOver: false, // If true don't update selected option on mouseover
+      identifier: 'some-unique-identifier' // added to attribute data-identifier of the autocomplete div
     })
 ```
   

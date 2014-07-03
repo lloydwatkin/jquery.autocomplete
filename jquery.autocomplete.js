@@ -71,10 +71,14 @@
 
       if (!this.options.width) this.options.width = this.el.width()
       this.mainContainerId = 'AutocompleteContainer_' + uid
-
+console.log(this.options)
+      var identifier = ''
+      if (this.options.identifier) {
+          identifier = 'data-identifier="' + this.options.identifier + '"'
+      }
       $('<div id="' + this.mainContainerId +
         '" style="position:absolute;z-index:9999;" ' +
-        'class="autocompleteContainer">' +
+        'class="autocompleteContainer" ' + identifier + '>' +
         '<div class="autocomplete-w1"><div class="autocomplete" id="' +
         autocompleteElementId + '" style="display:none; width:300px;"></div></div></div>')
         .appendTo('body')
@@ -102,6 +106,9 @@
       
       if (o.lookup) this.setLookup(o.lookup)
       $('#' + this.mainContainerId).css({ zIndex: o.zIndex })
+      if (o.identifier) {
+         $('#' + this.mainContainerId).attr('data-identifier', o.identifier)
+      }
       this.container.css({ maxHeight: o.maxHeight + 'px', width: o.width })
     },
     

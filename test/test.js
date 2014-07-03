@@ -200,3 +200,15 @@ describe('Substituting different data', function() {
     })
         
 })
+
+describe('HTML', function() {
+    
+    it('Adds identifier if requested', function(done) {
+        browser.element('div[data-identifier="month-selector"]').then(
+            function() { done() },
+            function() { done('Identifier not added') }
+        )
+    })
+    
+})
+
