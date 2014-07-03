@@ -71,7 +71,6 @@
 
       if (!this.options.width) this.options.width = this.el.width()
       this.mainContainerId = 'AutocompleteContainer_' + uid
-console.log(this.options)
       var identifier = ''
       if (this.options.identifier) {
           identifier = 'data-identifier="' + this.options.identifier + '"'
