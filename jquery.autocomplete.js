@@ -424,6 +424,7 @@
           this.el.html(val)
       }
       this.el.focus()
+      this.el.trigger('autosize.resize')
       if ($.isFunction(fn)) { fn(s, d, self.el) }
     },
 
