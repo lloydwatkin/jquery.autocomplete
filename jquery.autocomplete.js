@@ -1,7 +1,8 @@
 /**
- *  Autocomplete for jQuery, version 1.10.X
- *  (c) 2013 Lloyd Watkin
- *
+ * Autocomplete for jQuery, version 1.10.X
+ * (c) 2013 Lloyd Watkin
+ * Licensed under the MIT License 
+ * 
  * Heavily modified from http://www.devbridge.com/projects/autocomplete/jquery/
  */
 (function($) {
