@@ -77,11 +77,13 @@
           identifier = 'data-identifier="' + this.options.identifier + '"'
       }
       $('<div id="' + this.mainContainerId +
-        '" style="position:absolute;z-index:9999;" ' +
-        'class="autocompleteContainer" ' + identifier + '>' +
+        '" class="autocompleteContainer" ' + identifier + '>' +
         '<div class="autocomplete-w1"><div class="autocomplete" id="' +
-        autocompleteElementId + '" style="display:none; width:300px;"></div></div></div>')
+        autocompleteElementId + '"></div></div></div>')
         .appendTo('body')
+
+      $('#'+this.mainContainerId).css({'position': 'absolute', 'z-index': '9999'})
+      $('#'+autocompleteElementId).css({'display':'none', 'width':'300px'})
 
       this.container = $('#' + autocompleteElementId)
       this.fixPosition()
