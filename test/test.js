@@ -241,6 +241,17 @@ describe('Disable and Enable', function(){
     });
 })
 
+describe('Max Suggestions', function(){
+    it('Show only 1 suggestion (2 possible)', function(done){
+        browser.executeScript("a.setOptions({maxSuggestions:1})")
+        browser.element('#test1').sendKeys('Ma')
+        browser.elements('div.autocomplete div').count(function(length) {
+            length.should.equal(1)
+            done()
+        })
+    });
+})
+
 describe('Append Chars (appendChars option)', function(){
 
     it('Appends characters to the end of the selected suggesion.', function(done){
