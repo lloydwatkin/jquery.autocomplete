@@ -212,3 +212,31 @@ describe('HTML', function() {
     
 })
 
+describe('Disable and Enable', function(){
+    
+    it('Is disabled when disable() is called.', function(done){
+        browser.executeScript("a.disable()")
+        browser.element('#test1').sendKeys('Ma')
+        browser.element('div.autocomplete').isDisplayed(function(displayed) {
+            displayed.should.be.false
+            done()
+        })
+    });
+    
+    it('Is enabled after disable (disable() followed by enable()).', function(done){
+        browser.executeScript("a.disable()")
+        browser.element('#test1').sendKeys('Ma')
+        browser.element('div.autocomplete').isDisplayed(function(displayed) {
+            displayed.should.be.false
+        })
+        // Webdriver .clear() func  didn't work, so run CTRL+a followed by DELETE to clear the field
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.chord(helper.Webdriver.Key.CONTROL,"a"));
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.DELETE);
+        browser.executeScript("a.enable()")
+        browser.element('#test1').sendKeys('Ma')
+        browser.elements('div.autocomplete div').count(function(length) {
+            length.should.equal(2)
+            done()
+        })
+    });
+})
