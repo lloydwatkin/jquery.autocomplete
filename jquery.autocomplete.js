@@ -106,7 +106,7 @@
       var o = this.options
       $.extend(o, options)
       
-      if (o.lookup) this.setLookup(o.lookup)
+      if (options.lookup) this.setLookup(options.lookup)
       $('#' + this.mainContainerId).css({ zIndex: o.zIndex })
       if (o.identifier) {
          $('#' + this.mainContainerId).attr('data-identifier', o.identifier)
