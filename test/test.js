@@ -240,3 +240,18 @@ describe('Disable and Enable', function(){
         })
     });
 })
+
+describe('Append Chars (appendChars option)', function(){
+
+    it('Appends characters to the end of the selected suggesion.', function(done){
+        browser.executeScript("a.setOptions({appendChars:'te5t'})")
+        browser.element('#test1').sendKeys('Ma')
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.RETURN + helper.Webdriver.Key.ENTER)
+        browser.input('#test1').value(function(value) {
+            value.should.equal('Mayte5t')
+            done()
+        })
+    });
+});
