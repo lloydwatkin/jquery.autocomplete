@@ -256,14 +256,14 @@
       q       = q.toLowerCase()
 
       var checkMaxSuggestions = false
-      if (typeof(this.options.maxSuggestions) === 'number' &&
-          (this.options.maxSuggestions%1) === 0 &&
-          this.options.maxSuggestions > 0) {
+      if ((typeof(this.options.maxSuggestions) === 'number') &&
+          ((this.options.maxSuggestions % 1) === 0) &&
+          (this.options.maxSuggestions > 0)) {
         checkMaxSuggestions = true
       }
 
       for (var index in arr) {
-        if ((true === checkMaxSuggestions) && (ret.suggestions.length === this.options.maxSuggestions)){
+        if ((true === checkMaxSuggestions) && (ret.suggestions.length === this.options.maxSuggestions)) {
           break
         }
           
