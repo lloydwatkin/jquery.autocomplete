@@ -42,7 +42,8 @@
       searchEverywhere: false,
       appendChars: ' ',
       insertDomContent: this.insertDomContent,
-      disableMouseOver: false
+      disableMouseOver: false,
+      maxSuggestions: null
     }
     this.initialize()
     this.setOptions(options)
@@ -254,7 +255,18 @@
       var ret = { suggestions: [], data: [] }
       q       = q.toLowerCase()
 
+      var checkMaxSuggestions = false
+      if ((typeof(this.options.maxSuggestions) === 'number') &&
+          ((this.options.maxSuggestions % 1) === 0) &&
+          (this.options.maxSuggestions > 0)) {
+        checkMaxSuggestions = true
+      }
+
       for (var index in arr) {
+        if ((true === checkMaxSuggestions) && (ret.suggestions.length === this.options.maxSuggestions)) {
+          break
+        }
+          
         var val = arr[index]
         if ('object' === typeof(val)) {
           val = val[this.options.searchKey]
