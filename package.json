@@ -7,7 +7,7 @@
     "should": "^7.1.1",
     "webdriverjs-helper": "^1.2.0",
     "mocha": "^2.3.3",
-    "connect": "^3.4.0"
+    "connect": "^2.16.1"
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha -R spec -t 60000 ./test/test"
