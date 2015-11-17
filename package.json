@@ -11,5 +11,6 @@
   },
   "scripts": {
     "test": "./node_modules/.bin/mocha -R spec -t 60000 ./test/test"
-  }
+  },
+  "version": ">=4.2"
 }
