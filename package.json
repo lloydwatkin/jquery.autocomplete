@@ -9,8 +9,16 @@
     "mocha": "^2.3.3",
     "connect": "^2.16.1"
   },
+  "license": "MIT",
   "scripts": {
     "test": "./node_modules/.bin/mocha -R spec -t 60000 ./test/test"
   },
-  "version": ">=4.2"
+  "engines": {
+    "node": ">=4.2"
+  },
+  "engineStrict": true,
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/lloydwatkin/jquery.autocomplete"
+  }  
 }
