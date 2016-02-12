@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "devDependencies": {
     "phantomjs": "~1.9.7-5",
-    "selenium-webdriver": "^2.41.0",
+    "selenium-webdriver": "^2.52.0",
     "should": "^3.3.1",
     "webdriverjs-helper": "^1.2.0",
     "mocha": "^2.3.3",
@@ -20,5 +20,5 @@
   "repository": {
     "type": "git",
     "url": "git://github.com/lloydwatkin/jquery.autocomplete"
-  }  
+  }
 }
