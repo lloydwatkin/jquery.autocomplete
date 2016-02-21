@@ -144,7 +144,7 @@ describe('Display', function() {
         })
         browser.element('#test1').sendKeys(helper.Webdriver.Key.ESCAPE)
         helper.wait(browser, 10)
-        browser.element('div.autocomplete').isDisplayed(function(displayed) {
+        browser.element('div.autocomplete').isVisible(function(displayed) {
             displayed.should.be.false
             done()
         })
@@ -216,7 +216,7 @@ describe('Disable and Enable', function(){
     it('Is disabled when disable() is called.', function(done){
         browser.executeScript("a.disable()")
         browser.element('#test1').sendKeys('Ma')
-        browser.element('div.autocomplete').isDisplayed(function(displayed) {
+        browser.element('div.autocomplete').isVisible(function(displayed) {
             displayed.should.be.false
             done()
         })
@@ -225,7 +225,7 @@ describe('Disable and Enable', function(){
     it('Is enabled after disable (disable() followed by enable()).', function(done) {
         browser.executeScript("a.disable()")
         browser.element('#test1').sendKeys('Ma')
-        browser.element('div.autocomplete').isDisplayed(function(displayed) {
+        browser.element('div.autocomplete').isVisible(function(displayed) {
             displayed.should.be.false
         })
         /* Webdriver .clear() func  didn't work, so run CTRL+a
