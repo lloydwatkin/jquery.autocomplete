@@ -1,5 +1,6 @@
 var Webdriver = require('selenium-webdriver')
   , connect = require('connect')
+  , serveStatic = require('serve-static')
 require('webdriverjs-helper')
 require('should')
 
@@ -8,7 +9,7 @@ var server = null
 
 var startServer = function(done) {
 
-    httpServer = connect().use(connect.static('.')).listen(8080)
+    httpServer = connect().use(serveStatic('.')).listen(8080)
 
     SeleniumServer = require('selenium-webdriver/remote').SeleniumServer
     server = new SeleniumServer(

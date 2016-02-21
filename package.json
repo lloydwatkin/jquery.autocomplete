@@ -2,12 +2,13 @@
   "name": "jquery.autocomplete",
   "version": "1.0.0",
   "devDependencies": {
-    "connect": "^2.16.1",
+    "connect": "^3.4.1",
     "mocha": "^2.3.3",
     "phantomjs-prebuilt": "~2.1.4",
     "selenium-webdriver": "2.43.5",
+    "serve-static": "^1.10.2",
     "should": "^8.2.2",
-    "webdriverjs-helper": "1.2.1"
+    "webdriverjs-helper": "2"
   },
   "license": "MIT",
   "scripts": {
