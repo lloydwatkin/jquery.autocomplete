@@ -7,12 +7,12 @@ var server = null
   , httpServer = null
 
 var startServer = function(done) {
-    
+
     httpServer = connect().use(connect.static('.')).listen(8080)
-    
+
     SeleniumServer = require('selenium-webdriver/remote').SeleniumServer
     server = new SeleniumServer(
-        'test/resources/selenium-server-standalone-2.39.0.jar',
+        'test/resources/selenium-server-standalone-2.43.1.jar',
         { port: 4444 }
     )
     server.start().then(function() {
@@ -27,7 +27,7 @@ var stopServer = function(done) {
 }
 
 var _getBrowser = function(done) {
-    
+
     var capabilities = (process.env.BROWSER && process.env.BROWSER === 'firefox') ?
         Webdriver.Capabilities.firefox() : Webdriver.Capabilities.phantomjs()
     var browser = new Webdriver.Builder()
