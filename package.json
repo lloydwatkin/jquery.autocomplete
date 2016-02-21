@@ -5,7 +5,7 @@
     "connect": "^2.16.1",
     "mocha": "^2.3.3",
     "phantomjs-prebuilt": "~2.1.4",
-    "selenium-webdriver": "2.43.1",
+    "selenium-webdriver": "2.43.5",
     "should": "^8.2.2",
     "webdriverjs-helper": "1.2.1"
   },
