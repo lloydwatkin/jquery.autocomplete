@@ -4,7 +4,7 @@
   "devDependencies": {
     "connect": "^3.4.1",
     "mocha": "^2.3.3",
-    "phantomjs-prebuilt": "~2.1.4",
+    "phantomjs-prebuilt": "~2.1.6",
     "selenium-webdriver": "2.43.5",
     "serve-static": "^1.10.2",
     "should": "^8.2.2",
