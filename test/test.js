@@ -1,20 +1,20 @@
 'use strict';
 
-var helper    = require('./helper')
-  , should    = require('should')
+var helper = require('./helper')
+  , should = require('should')
 
 var browser
 
 before(function(done) {
     helper.getBrowser(function(driver) {
-        browser = driver
-        done()
+      browser = driver
+      done()
     })
 })
 
 beforeEach(function(done) {
-    browser.get('http://127.0.0.1:8080/test/test.html')
-        .then(function() { done() })
+  browser.get('http://127.0.0.1:8080/test/test.html')
+    .then(function() { done() })
 })
 
 after(function(done) {
@@ -24,9 +24,8 @@ after(function(done) {
 })
 
 describe('Lookups', function() {
-    
-  it('Performs a simple lookup', function(done) {
 
+  it('Performs a simple lookup', function(done) {
     browser.element('#test1').sendKeys('M')
     browser.elements('div.autocomplete div').count(function(length) {
       length.should.equal(0)
@@ -47,7 +46,7 @@ describe('Lookups', function() {
       done()
     })
   })
-  
+
   it('Adds \'selected\' CSS class when item selected with down arrow', function(done) {
     browser.element('#test1').sendKeys('March')
     browser.elements('div.autocomplete div').count(function(length) {
@@ -56,7 +55,7 @@ describe('Lookups', function() {
 
     browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
     browser.element('div.autocomplete div.selected').html(function(html) {
-        html.should.include('<strong>March</strong>')
+        html.should.containEql('<strong>March</strong>')
         done()
     })
   })
@@ -64,7 +63,7 @@ describe('Lookups', function() {
 })
 
 describe('Autocomplete fill', function() {
-  
+
     it('Updates text box as I select values with arrow keys', function(done) {
         browser.element('#test1').sendKeys('Ma')
         browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
@@ -79,9 +78,9 @@ describe('Autocomplete fill', function() {
         browser.input('#test1').value(function(value) {
             value.should.equal('March')
             done()
-        }) 
+        })
     })
-    
+
     it('Updates text box when clicking a value', function(done) {
         browser.element('#test1').sendKeys('Mar')
         browser.element('div.autocomplete div[title="March"]').click()
@@ -90,7 +89,7 @@ describe('Autocomplete fill', function() {
             done()
         })
     })
-    
+
     it('Leaves autofill in place when I press space after highlighting', function(done) {
         browser.element('#test1').sendKeys('Ma')
         browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
@@ -100,7 +99,7 @@ describe('Autocomplete fill', function() {
             done()
         })
     })
-    
+
     it('Adds autocomplete when I select entry and hit enter', function(done) {
         browser.element('#test1').sendKeys('Ma')
         browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
@@ -110,7 +109,7 @@ describe('Autocomplete fill', function() {
             done()
         })
     })
-    
+
     it('Adds autocomplete when I select entry and hit return', function(done) {
         browser.element('#test1').sendKeys('Ma')
         browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
@@ -120,7 +119,7 @@ describe('Autocomplete fill', function() {
             done()
         })
     })
-    
+
     /* Firefox seems to like RETURN, phantomjs likes ENTER, so send both */
     it('Hitting enter when there\'s only one option adds that meeting', function(done) {
         browser.element('#test1').sendKeys('Mar')
@@ -133,7 +132,7 @@ describe('Autocomplete fill', function() {
             done()
         })
     })
-    
+
 })
 
 describe('Display', function() {
@@ -145,12 +144,12 @@ describe('Display', function() {
         })
         browser.element('#test1').sendKeys(helper.Webdriver.Key.ESCAPE)
         helper.wait(browser, 10)
-        browser.element('div.autocomplete').isDisplayed(function(displayed) {
+        browser.element('div.autocomplete').isVisible(function(displayed) {
             displayed.should.be.false
             done()
         })
     })
-    
+
 })
 
 describe('Substituting different data', function() {
@@ -162,17 +161,17 @@ describe('Substituting different data', function() {
         })
         browser.elements('div.autocomplete div').get(0, function(element) {
             element.html(function(html) {
-                html.should.include('<strong>Ma</strong>rch (3rd month)')
+                html.should.containEql('<strong>Ma</strong>rch (3rd month)')
             })
         })
         browser.elements('div.autocomplete div').get(1, function(element) {
             element.html(function(html) {
-                html.should.include('<strong>Ma</strong>y (5th month)')
+                html.should.containEql('<strong>Ma</strong>y (5th month)')
                 done()
             })
         })
     })
-    
+
     it('Substitutes alternative values', function(done) {
         browser.element('#test2').sendKeys('Mar')
         browser.element('#test2').sendKeys(helper.Webdriver.Key.RETURN + helper.Webdriver.Key.ENTER)
@@ -181,11 +180,11 @@ describe('Substituting different data', function() {
             done()
         })
     })
-    
+
     it('If option is selected and space is pressed then alternative data substitution takes place', function(done) {
         browser.element('#test2').sendKeys('Ma')
         browser.element('#test2').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
-        
+
         browser.input('#test2').value(function(value) {
             value.should.equal('March')
         })
@@ -198,71 +197,84 @@ describe('Substituting different data', function() {
             done()
         })
     })
-        
+
 })
 
 describe('HTML', function() {
-    
+
     it('Adds identifier if requested', function(done) {
         browser.element('div[data-identifier="month-selector"]').then(
             function() { done() },
             function() { done('Identifier not added') }
         )
     })
-    
+
 })
 
 describe('Disable and Enable', function(){
-    
+
     it('Is disabled when disable() is called.', function(done){
         browser.executeScript("a.disable()")
         browser.element('#test1').sendKeys('Ma')
-        browser.element('div.autocomplete').isDisplayed(function(displayed) {
+        browser.element('div.autocomplete').isVisible(function(displayed) {
             displayed.should.be.false
             done()
         })
-    });
-    
-    it('Is enabled after disable (disable() followed by enable()).', function(done){
+    })
+
+    it('Is enabled after disable (disable() followed by enable()).', function(done) {
         browser.executeScript("a.disable()")
         browser.element('#test1').sendKeys('Ma')
-        browser.element('div.autocomplete').isDisplayed(function(displayed) {
+        browser.element('div.autocomplete').isVisible(function(displayed) {
             displayed.should.be.false
         })
-        // Webdriver .clear() func  didn't work, so run CTRL+a followed by DELETE to clear the field
-        browser.element('#test1').sendKeys(helper.Webdriver.Key.chord(helper.Webdriver.Key.CONTROL,"a"));
-        browser.element('#test1').sendKeys(helper.Webdriver.Key.DELETE);
+        /* Webdriver .clear() func  didn't work, so run CTRL+a
+         * followed by DELETE to clear the field
+         */
+        browser.element('#test1').sendKeys(
+          helper.Webdriver.Key.chord(helper.Webdriver.Key.CONTROL,"a")
+        )
+        browser.element('#test1').sendKeys(helper.Webdriver.Key.DELETE)
         browser.executeScript("a.enable()")
         browser.element('#test1').sendKeys('Ma')
         browser.elements('div.autocomplete div').count(function(length) {
             length.should.equal(2)
             done()
         })
-    });
+
+    })
+
 })
 
-describe('Max Suggestions', function(){
-    it('Show only 1 suggestion (2 possible)', function(done){
-        browser.executeScript("a.setOptions({maxSuggestions:1})")
+describe('Max Suggestions', function() {
+
+    it('Show only 1 suggestion (2 possible)', function(done) {
+        browser.executeScript('a.setOptions({ maxSuggestions: 1 })')
         browser.element('#test1').sendKeys('Ma')
         browser.elements('div.autocomplete div').count(function(length) {
             length.should.equal(1)
             done()
         })
-    });
+    })
+
 })
 
 describe('Append Chars (appendChars option)', function(){
 
-    it('Appends characters to the end of the selected suggesion.', function(done){
-        browser.executeScript("a.setOptions({appendChars:'te5t'})")
+    it('Appends characters to the end of the selected suggesion.', function(done) {
+
+        browser.executeScript('a.setOptions({ appendChars: "te5t" })')
         browser.element('#test1').sendKeys('Ma')
         browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
         browser.element('#test1').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
-        browser.element('#test1').sendKeys(helper.Webdriver.Key.RETURN + helper.Webdriver.Key.ENTER)
+        browser.element('#test1').sendKeys(
+          helper.Webdriver.Key.RETURN + helper.Webdriver.Key.ENTER
+        )
         browser.input('#test1').value(function(value) {
             value.should.equal('Mayte5t')
             done()
         })
-    });
-});
+
+    })
+
+})
