@@ -278,3 +278,22 @@ describe('Append Chars (appendChars option)', function(){
     })
 
 })
+
+describe('On Select Callback Method onSelect option', function() {
+
+    it('Pass selected values to call back function.', function(done) {
+        browser.executeScript('b.setOptions({ onSelect: function(value,data){ $("#onselectvalue").html(value); $("#onselectvalue").append(data.search); $("#onselectvalue").append(data.data) } })')
+        browser.element('#test2').sendKeys('Ma')
+        browser.element('#test2').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
+        browser.element('#test2').sendKeys(helper.Webdriver.Key.ARROW_DOWN)
+        browser.element('#test2').sendKeys(
+          helper.Webdriver.Key.RETURN + helper.Webdriver.Key.ENTER
+        )
+        browser.element('#onselectvalue').html(function(html){
+            html.should.equal('MayMay5th month')
+            done()
+        })
+
+    })
+
+})
