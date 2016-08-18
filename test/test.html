@@ -26,12 +26,18 @@ var a = $('#test1').autocomplete({
   disableMouseOver: true,
   lookup: ['January', 'February', 'March', 'April', 'May'],
   identifier: 'month-selector'
-})
+});
     </script>
       
     <h1>Alternative substitution test</h1>
       
     <input id="test2" value="" />
+
+    <h1>Onselect test</h1>
+    <h2 id="onselectvalue"></h2>
+    <h2 id="onselectdata1"></h2>
+    <h2 id="onselectdata2"></h2>
+
       
     <script type="text/javascript">
 var b = $('#test2').autocomplete({
@@ -48,6 +54,7 @@ var b = $('#test2').autocomplete({
   dataKey: 'data',
   searchKey: 'search'
 })
+
     </script>
   </body>
 </html>
