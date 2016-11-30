@@ -1,8 +1,8 @@
 /**
  * Autocomplete for jQuery, version 1.10.X
  * (c) 2013 Lloyd Watkin
- * Licensed under the MIT License 
- * 
+ * Licensed under the MIT License
+ *
  * Heavily modified from http://www.devbridge.com/projects/autocomplete/jquery/
  */
 (function($) {
@@ -49,7 +49,7 @@
     this.setOptions(options)
     return this
   }
-  
+
   $.fn.autocomplete = function(options) {
     return new Autocomplete(this.get(0) || $('<input />'), options)
   }
@@ -65,7 +65,7 @@
       var autocompleteElementId = 'Autocomplete_' + uid
 
       this.killerFn = function(e) {
-        if (0 === $(e.target).parents('.autocomplete').size()) {
+        if (0 === $(e.target).parents('.autocomplete').length) {
           self.killSuggestions()
           self.disableKillerFn()
         }
@@ -98,15 +98,15 @@
       this.el.blur(function() { self.enableKillerFn() })
       this.el.focus(function() { self.fixPosition() })
     },
-    
+
     template: function(suggestion, data) {
       return this.options.formatResult(suggestion, data, this)
     },
-    
+
     setOptions: function(options) {
       var o = this.options
       $.extend(o, options)
-      
+
       if (options.lookup) this.setLookup(options.lookup)
       $('#' + this.mainContainerId).css({ zIndex: o.zIndex })
       if (o.identifier) {
@@ -114,26 +114,26 @@
       }
       this.container.css({ maxHeight: o.maxHeight + 'px', width: o.width })
     },
-    
+
     setLookup: function(lookup) {
         this.isLocal = true
         if ($.isArray(lookup) || $.isPlainObject(lookup))
             this.options.lookup = { suggestions: lookup, data: [] }
     },
-    
+
     clearCache: function() {
       this.cachedResponse = []
       this.badQueries = []
     },
-    
+
     disable: function() {
       this.disabled = true
     },
-    
+
     enable: function() {
       this.disabled = false
     },
-      
+
     fixPosition: function() {
       var offset = this.el.offset()
       $('#' + this.mainContainerId).css({
@@ -185,7 +185,7 @@
           if (9 === e.keyCode) return
           break
         case 38: /* UP */
-          this.moveUp() 
+          this.moveUp()
           break
         case 40: /* DOWN */
           this.moveDown()
@@ -266,7 +266,7 @@
         if ((true === checkMaxSuggestions) && (ret.suggestions.length === this.options.maxSuggestions)) {
           break
         }
-          
+
         var val = arr[index]
         if ('object' === typeof(val)) {
           val = val[this.options.searchKey]
@@ -286,7 +286,7 @@
       }
       return ret
     },
-    
+
     getSuggestions: function(q) {
       var self = this
       var cached = this.isLocal ? this.getSuggestionsLocal(q) : this.cachedResponse[q]
@@ -319,7 +319,7 @@
     suggest: function() {
       if (0 === this.suggestions.length)
         return this.hide()
-      this.fixPosition()  
+      this.fixPosition()
       var div, s
       var self = this
       var len = this.suggestions.length
@@ -458,7 +458,7 @@
           console.debug('Unable to change caret position')
       }
     },
-      
+
     insertDomContent: function(data, suggestion, context) {
       var val = context.getValue(suggestion)
       if ('object' === typeof(data))
@@ -466,11 +466,11 @@
       if (context.options.appendChars) val = val + context.options.appendChars
       return val
     },
-      
+
     isFormField: function() {
         return this.el.is('input') || this.el.is('textarea')
     },
-    
+
     getValue: function(value) {
         var del = this.options.delimiter
         if (!del) return value
@@ -480,7 +480,7 @@
         var response = currVal.substr(0, currVal.length - arr[arr.length - 1].length)
         return response + value
     },
-      
+
     /**
      * value: Data entered to autocomplete
      * data: Matching data
@@ -499,5 +499,5 @@
         $('#' + this.mainContainerId).remove()
     },
   }
-  
+
 })(jQuery)
