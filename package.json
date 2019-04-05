@@ -11,6 +11,7 @@
     "webdriverjs-helper": "3.0.0"
   },
   "license": "MIT",
+  "main": "jquery.autocomplete.js",
   "scripts": {
     "test": "./node_modules/.bin/mocha -R spec -t 60000 ./test/test"
   },
